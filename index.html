@@ -818,7 +818,7 @@ DADOS.fluxo.filter(d => !d.is_weekend).forEach(d=>{
 </script>
 
 <script>
-/* === Pontos verdes dinâmicos — Saldo Real === */
+/* === Pontos verdes — Saldo Real === */
 (function() {
   if (typeof DADOS === 'undefined') return;
   var fluxo = DADOS.fluxo;
@@ -855,8 +855,8 @@ DADOS.fluxo.filter(d => !d.is_weekend).forEach(d=>{
           return yLabels[i].y + t * (yLabels[i+1].y - yLabels[i].y);
         }
       }
-      var scale = (yLabels[yLabels.length-1].y - yLabels[0].y) / (yLabels[yLabels.length-1].saldo - yLabels[0].saldo);
-      return yLabels[0].y + (saldo - yLabels[0].saldo) * scale;
+      var sc = (yLabels[yLabels.length-1].y - yLabels[0].y) / (yLabels[yLabels.length-1].saldo - yLabels[0].saldo);
+      return yLabels[0].y + (saldo - yLabels[0].saldo) * sc;
     }
     var chartFluxo = fluxo.filter(function(f) { return is30d ? f.is_30d : true; });
     chartFluxo.forEach(function(entry, idx) {
