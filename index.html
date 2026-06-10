@@ -894,8 +894,15 @@ DADOS.fluxo.filter(d => !d.is_weekend).forEach(d=>{
       svg.appendChild(c);
     });
   }
-  renderRealLine('svg-chart-30', true);
-  renderRealLine('svg-chart-90', false);
+  function initRealLine() {
+    renderRealLine('svg-chart-30', true);
+    renderRealLine('svg-chart-90', false);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initRealLine);
+  } else {
+    initRealLine();
+  }
 })();
 </body>
 </html>
