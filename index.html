@@ -902,11 +902,8 @@ DADOS.fluxo.filter(d => !d.is_weekend).forEach(d=>{
     renderRealLine('svg-chart-30', true);
     renderRealLine('svg-chart-90', false);
   }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initRealLine);
-  } else {
-    initRealLine();
-  }
+  // Script is at end of <body> — SVGs already in DOM, call directly
+  initRealLine();
 })();
 </body>
 </html>
