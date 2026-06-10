@@ -509,6 +509,7 @@ function showSection(id, btn){
   btn.classList.add('active');
 }
 
+document.addEventListener('DOMContentLoaded', function() {
 // 30 dias
 document.getElementById('resumo-30').innerHTML = 
   `Em 30 dias (08/06 → 08/07), AR projetado <strong>${fmtM(m.d30_ar)}</strong> vs AP <strong>${fmtM(m.d30_ap)}</strong>. Líquido <strong>+${fmtK(m.d30_liq)}</strong> — saldo termina em <strong>${fmtM(m.d30_saldo_base)}</strong>. Ponto crítico: <strong>17/06 (qua dos impostos R$ 6,89M confirmado)</strong>, levando saldo ao mínimo de ${fmtM(m.d30_menor_base)}.`;
@@ -590,6 +591,7 @@ DADOS.fluxo.filter(d => !d.is_weekend).forEach(d=>{
     <td><span class="tipo-pill ${statusClass}">${status}</span></td>`;
   tbodyVal.appendChild(tr);
 });
+}); // DOMContentLoaded
 </script>
 
 <script>
