@@ -510,9 +510,9 @@ function showSection(id, btn){
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-try {
 // 30 dias
-document.getElementById('resumo-30').innerHTML = 
+var _r30 = document.getElementById('resumo-30');
+if (_r30) _r30.innerHTML = 
   `Em 30 dias (08/06 → 08/07), AR projetado <strong>${fmtM(m.d30_ar)}</strong> vs AP <strong>${fmtM(m.d30_ap)}</strong>. Líquido <strong>+${fmtK(m.d30_liq)}</strong> — saldo termina em <strong>${fmtM(m.d30_saldo_base)}</strong>. Ponto crítico: <strong>17/06 (qua dos impostos R$ 6,89M confirmado)</strong>, levando saldo ao mínimo de ${fmtM(m.d30_menor_base)}.`;
 document.getElementById('k30-ini').textContent = fmtM(m.saldo_inicial);
 document.getElementById('k30-ar').textContent = fmtM(m.d30_ar);
@@ -531,7 +531,8 @@ document.getElementById('d30-pess').textContent = ((m.d30_saldo_pess-baseV30)/ba
 document.getElementById('d30-extr').textContent = ((m.d30_saldo_extr-baseV30)/baseV30*100).toFixed(1) + '%';
 
 // 90 dias
-document.getElementById('resumo-90').innerHTML = 
+var _r90 = document.getElementById('resumo-90');
+if (_r90) _r90.innerHTML = 
   `Em 90 dias (08/06 → 08/09), AR projetado <strong>${fmtM(m.d90_ar)}</strong> vs AP <strong>${fmtM(m.d90_ap)}</strong>. Líquido <strong>+${fmtM(m.d90_liq)}</strong> — saldo termina em <strong>${fmtM(m.d90_saldo_base)}</strong>, +${fmtK(m.d90_saldo_base-m.saldo_inicial)} sobre o inicial. Eventos pesados: 17/06 impostos, 01/07 folha+qua, 10/07 bônus R$ 3M, 15/07 impostos. Menor saldo em ${m.d90_menor_data}: <strong>${fmtM(m.d90_menor_base)}</strong>.`;
 document.getElementById('k90-ini').textContent = fmtM(m.saldo_inicial);
 document.getElementById('k90-ar').textContent = fmtM(m.d90_ar);
@@ -571,7 +572,7 @@ const labels90 = DADOS.fluxo.map(d=>d.data_br);
 
 // Popular tabela Projetado vs Realizado
 const tbodyVal = document.getElementById('tbody-validacao');
-DADOS.fluxo.filter(d => !d.is_weekend).forEach(d=>{
+if (tbodyVal) DADOS.fluxo.filter(d => !d.is_weekend).forEach(d=>{
   const tr = document.createElement('tr');
   const status = d.tem_real ? 'REAL' : 'PROJETADO';
   const statusClass = d.tem_real ? 'tipo-real' : 'tipo-proj';
@@ -591,8 +592,8 @@ DADOS.fluxo.filter(d => !d.is_weekend).forEach(d=>{
     <td class="text-right ${deltaCls}">${deltaP}</td>
     <td><span class="tipo-pill ${statusClass}">${status}</span></td>`;
   tbodyVal.appendChild(tr);
+  }
 });
-} catch(e) { console.warn("Dashboard init:", e.message); }
 }); // DOMContentLoaded
 </script>
 
