@@ -552,7 +552,7 @@ document.getElementById('d90-extr').textContent = ((m.d90_saldo_extr-baseV90)/ba
 
 // Eventos
 const eg = document.getElementById('eventos-grid');
-DADOS.eventos_criticos.forEach(e => {
+if (eg) DADOS.eventos_criticos.forEach(e => {
   const div = document.createElement('div');
   div.className = 'evento-card';
   div.innerHTML = `<div class="data">${e.data}/2026 (${e.dow})</div><div class="val">-${fmtM(e.ap)}</div><div class="desc">${e.evento || 'Quarta normal'}</div>`;
