@@ -816,16 +816,19 @@ DADOS.fluxo.filter(d => !d.is_weekend).forEach(d=>{
 </script>
 
 <script>
-/* === Pontos verdes — Saldo Real === */
+/* === Linha verde — Saldo Real === */
 (function() {
   if (typeof DADOS === 'undefined') return;
   var fluxo = DADOS.fluxo;
-  function renderDots(svgId, is30d) {
+  function renderRealLine(svgId, is30d) {
     var svg = document.getElementById(svgId);
     if (!svg) return;
+    // Remove elementos anteriores (círculos e linha real), preserva legenda
+    Array.from(svg.querySelectorAll('circle[data-real],polyline[data-real]')).forEach(function(el) { svg.removeChild(el); });
     Array.from(svg.querySelectorAll('circle')).forEach(function(c) {
       if (parseFloat(c.getAttribute('cy')) > 40) svg.removeChild(c);
     });
+    // Extrai coordenadas X da linha base (cenário base)
     var basePath = null;
     Array.from(svg.querySelectorAll('path')).forEach(function(p) {
       if (p.getAttribute('stroke') === '#6613D0' && p.getAttribute('fill') === 'none') basePath = p;
@@ -838,6 +841,7 @@ DADOS.fluxo.filter(d => !d.is_weekend).forEach(d=>{
     var cReg = /C\s*[\d.]+,[\d.]+\s+[\d.]+,[\d.]+\s+([\d.]+),([\d.]+)/g;
     var m;
     while ((m = cReg.exec(d)) !== null) pts.push({x: parseFloat(m[1]), y: parseFloat(m[2])});
+    // Escala Y a partir dos labels do eixo
     var yLabels = [];
     Array.from(svg.querySelectorAll('text')).forEach(function(t) {
       var txt = t.textContent.trim();
@@ -849,31 +853,49 @@ DADOS.fluxo.filter(d => !d.is_weekend).forEach(d=>{
     function saldoToY(saldo) {
       for (var i = 0; i < yLabels.length - 1; i++) {
         if (saldo >= yLabels[i].saldo && saldo <= yLabels[i+1].saldo) {
-          var t = (saldo - yLabels[i].saldo) / (yLabels[i+1].saldo - yLabels[i].saldo);
-          return yLabels[i].y + t * (yLabels[i+1].y - yLabels[i].y);
+          var t2 = (saldo - yLabels[i].saldo) / (yLabels[i+1].saldo - yLabels[i].saldo);
+          return yLabels[i].y + t2 * (yLabels[i+1].y - yLabels[i].y);
         }
       }
       var sc = (yLabels[yLabels.length-1].y - yLabels[0].y) / (yLabels[yLabels.length-1].saldo - yLabels[0].saldo);
       return yLabels[0].y + (saldo - yLabels[0].saldo) * sc;
     }
     var chartFluxo = fluxo.filter(function(f) { return is30d ? f.is_30d : true; });
+    var realPts = [];
     chartFluxo.forEach(function(entry, idx) {
       if (!entry.tem_real || !entry.saldo_real) return;
       if (idx >= pts.length) return;
-      var ns = 'http://www.w3.org/2000/svg';
-      var circle = document.createElementNS(ns, 'circle');
-      circle.setAttribute('cx', pts[idx].x.toFixed(1));
-      circle.setAttribute('cy', saldoToY(entry.saldo_real).toFixed(1));
-      circle.setAttribute('r', '7');
-      circle.setAttribute('fill', '#0f8a3c');
-      circle.setAttribute('stroke', 'white');
-      circle.setAttribute('stroke-width', '2');
-      svg.appendChild(circle);
+      realPts.push({x: pts[idx].x, y: saldoToY(entry.saldo_real)});
+    });
+    if (realPts.length === 0) return;
+    var ns = 'http://www.w3.org/2000/svg';
+    // Linha conectando os pontos reais
+    if (realPts.length > 1) {
+      var poly = document.createElementNS(ns, 'polyline');
+      poly.setAttribute('points', realPts.map(function(p){ return p.x.toFixed(1)+','+p.y.toFixed(1); }).join(' '));
+      poly.setAttribute('fill', 'none');
+      poly.setAttribute('stroke', '#0f8a3c');
+      poly.setAttribute('stroke-width', '2.5');
+      poly.setAttribute('stroke-linejoin', 'round');
+      poly.setAttribute('stroke-linecap', 'round');
+      poly.setAttribute('data-real', '1');
+      svg.appendChild(poly);
+    }
+    // Círculos pequenos em cada ponto
+    realPts.forEach(function(p) {
+      var c = document.createElementNS(ns, 'circle');
+      c.setAttribute('cx', p.x.toFixed(1));
+      c.setAttribute('cy', p.y.toFixed(1));
+      c.setAttribute('r', '5');
+      c.setAttribute('fill', '#0f8a3c');
+      c.setAttribute('stroke', 'white');
+      c.setAttribute('stroke-width', '2');
+      c.setAttribute('data-real', '1');
+      svg.appendChild(c);
     });
   }
-  renderDots('svg-chart-30', true);
-  renderDots('svg-chart-90', false);
+  renderRealLine('svg-chart-30', true);
+  renderRealLine('svg-chart-90', false);
 })();
-</script>
 </body>
 </html>
