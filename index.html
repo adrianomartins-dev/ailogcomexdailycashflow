@@ -35,7 +35,7 @@ body{font-family:'Poppins',sans-serif;background:var(--lx-bg);color:var(--lx-tex
 .kpi.green::before{background:var(--lx-green)}.kpi.orange::before{background:var(--lx-orange)}.kpi.red::before{background:var(--lx-red)}
 .kpi-label{font-size:.7rem;color:var(--lx-text-soft);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-weight:600}
 .kpi-value{font-family:'Funnel Display','Poppins',sans-serif;font-size:1.45rem;font-weight:700;color:var(--lx-pure);line-height:1.1;letter-spacing:-0.025em}
-.kpi.green .kpi-value{color:var(--lx-green)}.kpi.orange .kpi-value{color:var(--lx-orange)}.kpi.red .kpi-value{color:var(--lx-red)}
+.kpi.green .kpi-value{color:var(--lx-green)}.kpi.orange .kpi-value{color:var(--lx-orange)}.kpi.red .kpi-value{color:var(--lx-red)}.kpi.purple::before{background:var(--lx-pure)}.kpi.purple .kpi-value{color:var(--lx-pure)}
 .kpi-sub{font-size:.72rem;margin-top:6px;color:var(--lx-text-soft)}
 
 .card{background:#fff;border-radius:14px;padding:28px;box-shadow:0 1px 3px rgba(11,13,25,.04),0 8px 24px -8px rgba(45,8,93,.08);margin-bottom:24px;border:1px solid var(--lx-border)}
@@ -248,12 +248,12 @@ footer .sparkle{color:var(--lx-orange)}
 <!-- SEÇÃO 30 DIAS -->
 <div id="d30" class="section">
   <div class="kpi-row">
-    <div class="kpi green"><div class="kpi-label">Saldo do Dia</div><div class="kpi-value" id="k30-ini">R$ 22,57M</div><div class="kpi-sub">11/06/2026</div></div>
+    <div class="kpi purple"><div class="kpi-label">Saldo Global</div><div class="kpi-value" id="k30-global">R$ --,--M</div><div class="kpi-sub">BR + Offshore</div></div><div class="kpi green"><div class="kpi-label">Saldo do Dia</div><div class="kpi-value" id="k30-ini">R$ 22,57M</div><div class="kpi-sub">11/06/2026</div></div>
     <div class="kpi green"><div class="kpi-label">AR 30 dias</div><div class="kpi-value" id="k30-ar">R$ 15,69M</div><div class="kpi-sub">Projetado</div></div>
     <div class="kpi orange"><div class="kpi-label">AP 30 dias</div><div class="kpi-value" id="k30-ap">R$ 16,87M</div><div class="kpi-sub">Inclui 2 confirmados</div></div>
     <div class="kpi"><div class="kpi-label">Líquido</div><div class="kpi-value" id="k30-liq">R$ -1,18M</div><div class="kpi-sub">AR − AP</div></div>
     <div class="kpi"><div class="kpi-label">Saldo Final 08/07</div><div class="kpi-value" id="k30-fim">R$ 21,65M</div><div class="kpi-sub">Cenário Base</div></div>
-    <div class="kpi red"><div class="kpi-label">Menor Saldo</div><div class="kpi-value" id="k30-min">R$ 19,33M</div><div class="kpi-sub" id="k30-min-data">em 02/07/2026</div></div>
+    
   </div>
 </div>
 
@@ -519,8 +519,6 @@ document.getElementById('k30-ar').textContent = fmtM(m.d30_ar);
 document.getElementById('k30-ap').textContent = fmtM(m.d30_ap);
 document.getElementById('k30-liq').textContent = (m.d30_liq>=0?'+':'')+fmtM(m.d30_liq);
 document.getElementById('k30-fim').textContent = fmtM(m.d30_saldo_base);
-document.getElementById('k30-min').textContent = fmtM(m.d30_menor_base);
-document.getElementById('k30-min-data').textContent = 'em ' + m.d30_menor_data;
 document.getElementById('s30-otim').textContent = fmtM(m.d30_saldo_otim);
 document.getElementById('s30-base').textContent = fmtM(m.d30_saldo_base);
 document.getElementById('s30-pess').textContent = fmtM(m.d30_saldo_pess);
