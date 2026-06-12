@@ -203,7 +203,15 @@ footer .sparkle{color:var(--lx-orange)}
 /* Container do SVG: ambos os SVGs ocupam o mesmo lugar */
 .chart-card-unified .chart-container.chart-unified > .chart-svg { width:100%; height:auto; }
 
-</style>
+
+    /* Tabs inside chart card — adapt colors for white background */
+    .card .tabs .tab {
+      color: rgba(96, 19, 208, 0.6) !important;
+      background: rgba(96, 19, 208, 0.06) !important;
+      border-color: rgba(96, 19, 208, 0.25) !important;
+    }
+  
+  </style>
 </head>
 <body>
 <input type="radio" name="tabs" id="tab-30" checked style="display:none">
