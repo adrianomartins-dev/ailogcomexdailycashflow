@@ -963,6 +963,36 @@ document.addEventListener('DOMContentLoaded', function() {
   var v = document.getElementById('k30-ini');
   var t = document.getElementById('k90-ini');
   if (v && t) t.textContent = v.textContent;
+
+  // Add linear trend line to both charts based on real balance dots
+  ['svg-chart-30', 'svg-chart-90'].forEach(function(svgId) {
+    var svg = document.getElementById(svgId);
+    if (!svg) return;
+    var circles = Array.from(svg.querySelectorAll('circle[fill="#0f8a3c"]'));
+    var pts = circles
+      .map(function(c) { return {x: parseFloat(c.getAttribute('cx')), y: parseFloat(c.getAttribute('cy'))}; })
+      .filter(function(p) { return p.y > 50; })
+      .sort(function(a, b) { return a.x - b.x; });
+    if (pts.length < 2) return;
+    var n = pts.length;
+    var sx = pts.reduce(function(s,p){return s+p.x;},0);
+    var sy = pts.reduce(function(s,p){return s+p.y;},0);
+    var sxy = pts.reduce(function(s,p){return s+p.x*p.y;},0);
+    var sx2 = pts.reduce(function(s,p){return s+p.x*p.x;},0);
+    var slope = (n*sxy - sx*sy) / (n*sx2 - sx*sx);
+    var intercept = (sy - slope*sx) / n;
+    var x1 = pts[0].x, x2 = pts[pts.length-1].x;
+    var line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1', x1);
+    line.setAttribute('y1', (intercept + slope*x1).toFixed(1));
+    line.setAttribute('x2', x2);
+    line.setAttribute('y2', (intercept + slope*x2).toFixed(1));
+    line.setAttribute('stroke', '#0f8a3c');
+    line.setAttribute('stroke-width', '2.5');
+    line.setAttribute('stroke-dasharray', '8,4');
+    line.setAttribute('opacity', '0.75');
+    svg.appendChild(line);
+  });
 });
 </script>
 </body>
